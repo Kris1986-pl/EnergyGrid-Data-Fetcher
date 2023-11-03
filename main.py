@@ -6,7 +6,6 @@ from urllib.error import HTTPError
 
 import pandas as pd
 
-
 class DataFetcher:
     def __init__(self, factory_date: datetime):
         self.factory_date = factory_date
@@ -33,7 +32,7 @@ class PSEDataFetcher(DataFetcher):
         url = f"https://www.pse.pl/getcsv/-/export/csv/PL_PD_GO_BILANS/data_od/{current_date}/data_do/{next_date}"
 
         try:
-            data = pd.read_csv(url, encoding="ANSI", sep=";")
+            data = pd.read_csv(url, encoding="cp1252", sep=";")
             return data
         except HTTPError as e:
             print(f"HTTP Error {e.code}: {e.reason}")
