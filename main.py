@@ -3,8 +3,11 @@ Main module for data fetching.
 """
 from datetime import datetime, timedelta
 from urllib.error import HTTPError
+from contextlib import closing
 
+from requests import get
 import pandas as pd
+from bs4 import BeautifulSoup
 
 
 class DataFetcher:
@@ -30,11 +33,12 @@ class PSEDataFetcher(DataFetcher):
         current_date = self.factory_date.strftime('%Y%m%d')
         next_date = (self.factory_date + timedelta(days=1)).strftime('%Y%m%d')
 
-        url = f"https://www.pse.pl/getcsv/-/export/csv/PL_PD_GO_BILANS/data_od/{current_date}/data_do/{next_date}"
-
+        url = f"https://www.pse.pl/getcsv/-/export/csv/PL_PD_GO_BILANS/data_od/{current_date}/" \
+              f"data_do/{next_date}"
+        print(url)
         try:
-            data = pd.read_csv(url, encoding="ANSI", sep=";")
-            return data
+            data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
+            return data.head(24)
         except HTTPError as e:
             print(f"HTTP Error {e.code}: {e.reason}")
         except pd.errors.ParserError as e:
@@ -45,8 +49,29 @@ class PSEDataFetcher(DataFetcher):
 
 class TGEDataFetcher(DataFetcher):
     def fetch_data(self):
-        # Implement the data fetching logic for TGE here
-        print(f"Fetching data from Towarowa Giełda Energii (TGE): {self.factory_date.strftime('%Y-%m-%d')}")
+        url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShow=" \
+              f"{self.factory_date.strftime('%d-%m-%Y')}&dateAction=next"
+
+        def get_html(url):
+            with closing(get(url, stream=False)) as resp:
+                return resp
+                if resp.status_code == 200 and resp.headers['content-type'] is not None:
+                    return resp
+                else:
+                    return None
+
+        result = get_html(url)
+        bs = BeautifulSoup(result.text, 'lxml')
+        prices = []
+        fixing = 1
+        for index, body in enumerate(bs.find_all('tbody')):
+            if index == 2:
+                for index2, price in enumerate(body.find_all('td', 'footable-visible')):
+                    if index2 == fixing:
+                        prices.append(float([price.get_text().strip().replace(',', '.')][0]))
+                        fixing += 7
+        data = pd.DataFrame(data=prices, columns=['prise'])
+        return data
 
 
 class DataFetcherFactory:
@@ -87,4 +112,4 @@ if __name__ == "__main__":
 
     # Create a TGE data fetcher
     tge_fetcher = data_fetcher_factory.create_data_fetcher("TGE", date)
-    tge_fetcher.fetch_data()
+    print(tge_fetcher.fetch_data())
