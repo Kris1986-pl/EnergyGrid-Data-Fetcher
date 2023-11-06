@@ -1,6 +1,7 @@
 """
 Main module for data fetching.
 """
+from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from urllib.error import HTTPError
 from contextlib import closing
@@ -10,7 +11,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 
-class DataFetcher:
+class DataFetcher(ABC):
     """
         This is a base class for data fetching.
 
@@ -20,11 +21,15 @@ class DataFetcher:
         Methods:
             fetch_data(): This method should be implemented by subclasses to fetch data.
     """
+
     def __init__(self, factory_date: datetime):
         self.factory_date = factory_date
 
+    @abstractmethod
     def fetch_data(self):
-        pass
+        """
+            This method should be implemented by subclasses to fetch data.
+        """
 
 
 class PSEDataFetcher(DataFetcher):
