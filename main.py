@@ -11,6 +11,15 @@ from bs4 import BeautifulSoup
 
 
 class DataFetcher:
+    """
+        This is a base class for data fetching.
+
+        Args:
+            factory_date (datetime): The date for data fetching.
+
+        Methods:
+            fetch_data(): This method should be implemented by subclasses to fetch data.
+    """
     def __init__(self, factory_date: datetime):
         self.factory_date = factory_date
 
