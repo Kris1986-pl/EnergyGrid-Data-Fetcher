@@ -33,23 +33,27 @@ class DataFetcher(ABC):
 
 
 class PSEDataFetcher(DataFetcher):
-    def fetch_data(self):
-        """
-        Fetches data from Polskie Sieci Energetyczne (PSE) for a specific date range.
+    """
+        A data fetcher for retrieving data from Polskie Sieci Energetyczne (PSE).
 
-        Returns:
-            DataFrame: A pandas DataFrame containing the fetched data.
+        This class fetches data for a specific date range and returns it as a pandas DataFrame.
+
+        Args:
+            factory_date (datetime): The date for data fetching.
+
+        Methods:
+            fetch_data(): This method fetches data and returns a DataFrame.
 
         Raises:
             HTTPError: If there is an HTTP error while requesting data.
             pd.errors.ParserError: If there is an error parsing the CSV data.
-        """
+    """
+    def fetch_data(self):
         current_date = self.factory_date.strftime('%Y%m%d')
         next_date = (self.factory_date + timedelta(days=1)).strftime('%Y%m%d')
 
         url = f"https://www.pse.pl/getcsv/-/export/csv/PL_PD_GO_BILANS/data_od/{current_date}/" \
               f"data_do/{next_date}"
-        print(url)
         try:
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
             return data.head(24)
@@ -62,6 +66,18 @@ class PSEDataFetcher(DataFetcher):
 
 
 class TGEDataFetcher(DataFetcher):
+    """
+        A data fetcher for retrieving data from TGE (Polish Power Exchange).
+
+        This class fetches electricity price data from the TGE website for a specific date
+        and returns it as a pandas DataFrame.
+
+        Args:
+            factory_date (datetime): The date for data fetching.
+
+        Methods:
+            fetch_data(): This method fetches electricity price data and returns it as a DataFrame.
+    """
     def fetch_data(self):
         url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShow=" \
               f"{self.factory_date.strftime('%d-%m-%Y')}&dateAction=next"
@@ -109,7 +125,7 @@ class DataFetcherFactory:
         """
         if source == "PSE":
             return PSEDataFetcher(factory_date)
-        elif source == "TGE":
+        if source == "TGE":
             return TGEDataFetcher(factory_date)
         else:
             raise ValueError("Invalid source specified")
