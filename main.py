@@ -48,6 +48,7 @@ class PSEDataFetcher(DataFetcher):
             HTTPError: If there is an HTTP error while requesting data.
             pd.errors.ParserError: If there is an error parsing the CSV data.
     """
+
     def fetch_data(self):
         current_date = self.factory_date.strftime('%Y%m%d')
         next_date = (self.factory_date + timedelta(days=1)).strftime('%Y%m%d')
@@ -78,6 +79,7 @@ class TGEDataFetcher(DataFetcher):
         Methods:
             fetch_data(): This method fetches electricity price data and returns it as a DataFrame.
     """
+
     def fetch_data(self):
         url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShosw=" \
               f"{self.factory_date.strftime('%d-%m-%Y')}&dateAction=next"
@@ -103,9 +105,17 @@ class TGEDataFetcher(DataFetcher):
                     if index == 2:
                         for index2, price in enumerate(body.find_all('td', 'footable-visible')):
                             if index2 == fixing:
-                                prices.append(float([price.get_text().strip().replace(',', '.')][0]))
+                                prices.append(
+                                    float([price.get_text().strip().replace(',', '.')][0]))
                                 fixing += 7
                 data = pd.DataFrame(data=prices, columns=['price'])
+                data["date"] = self.factory_date.strftime('%Y-%m-%d')
+                # Convert the 'date' column to datetime format
+                data['date'] = pd.to_datetime(data['date'])
+
+                # Set the 'date' column as the index
+                data.set_index('date', inplace=True)
+
                 return data
             else:
                 # Raise an exception when the response is None
@@ -113,7 +123,6 @@ class TGEDataFetcher(DataFetcher):
         except Exception as e:
             # Raise any other exceptions
             raise ValueError(f"An unexpected error occurred: {e}")
-
 
 
 class DataFetcherFactory:
@@ -147,13 +156,13 @@ if __name__ == "__main__":
     date = datetime(2023, 10, 31)
     # Example usage:
     data_fetcher_factory = DataFetcherFactory()
-    # try:
-    #     # Create a PSE data fetcher
-    #     pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE", date)
-    #     print(pse_fetcher.fetch_data())
-    # except ValueError as ve:
-    #     # Handle other ValueErrors
-    #     print(f"Error: {ve}")
+    try:
+        # Create a PSE data fetcher
+        pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE", date)
+        print(pse_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
 
     try:
         # Create a TGE data fetcher
