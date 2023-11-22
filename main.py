@@ -58,11 +58,11 @@ class PSEDataFetcher(DataFetcher):
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
             return data.head(24)
         except HTTPError as e:
-            print(f"HTTP Error {e.code}: {e.reason}")
+            raise ValueError(f"HTTP Error {e.code}: {e.reason}")
         except pd.errors.ParserError as e:
-            print(f"Error parsing CSV data: {e}")
+            raise ValueError(f"Error parsing CSV data: {e}")
         except UnicodeDecodeError as e:
-            print(f"UnicodeDecodeError: {e}")
+            raise ValueError(f"UnicodeDecodeError: {e}")
 
 
 class TGEDataFetcher(DataFetcher):
@@ -79,29 +79,41 @@ class TGEDataFetcher(DataFetcher):
             fetch_data(): This method fetches electricity price data and returns it as a DataFrame.
     """
     def fetch_data(self):
-        url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShow=" \
+        url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShosw=" \
               f"{self.factory_date.strftime('%d-%m-%Y')}&dateAction=next"
 
         def get_html(url):
-            with closing(get(url, stream=False)) as resp:
-                return resp
-                if resp.status_code == 200 and resp.headers['content-type'] is not None:
-                    return resp
-                else:
-                    return None
+            try:
+                with closing(get(url, stream=False)) as resp:
+                    if resp.status_code == 200 and resp.headers['content-type'] is not None:
+                        return resp
+                    else:
+                        return None
+            except ConnectionError as ce:
+                raise ConnectionError(f"ConnectionError: {ce}")
 
-        result = get_html(url)
-        bs = BeautifulSoup(result.text, 'lxml')
-        prices = []
-        fixing = 1
-        for index, body in enumerate(bs.find_all('tbody')):
-            if index == 2:
-                for index2, price in enumerate(body.find_all('td', 'footable-visible')):
-                    if index2 == fixing:
-                        prices.append(float([price.get_text().strip().replace(',', '.')][0]))
-                        fixing += 7
-        data = pd.DataFrame(data=prices, columns=['prise'])
-        return data
+        try:
+            result = get_html(url)
+
+            if result is not None:
+                bs = BeautifulSoup(result.text, 'lxml')
+                prices = []
+                fixing = 1
+                for index, body in enumerate(bs.find_all('tbody')):
+                    if index == 2:
+                        for index2, price in enumerate(body.find_all('td', 'footable-visible')):
+                            if index2 == fixing:
+                                prices.append(float([price.get_text().strip().replace(',', '.')][0]))
+                                fixing += 7
+                data = pd.DataFrame(data=prices, columns=['price'])
+                return data
+            else:
+                # Raise an exception when the response is None
+                raise ValueError("Error: Unable to retrieve data from the server.")
+        except Exception as e:
+            # Raise any other exceptions
+            raise ValueError(f"An unexpected error occurred: {e}")
+
 
 
 class DataFetcherFactory:
@@ -135,11 +147,18 @@ if __name__ == "__main__":
     date = datetime(2023, 10, 31)
     # Example usage:
     data_fetcher_factory = DataFetcherFactory()
+    # try:
+    #     # Create a PSE data fetcher
+    #     pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE", date)
+    #     print(pse_fetcher.fetch_data())
+    # except ValueError as ve:
+    #     # Handle other ValueErrors
+    #     print(f"Error: {ve}")
 
-    # Create a PSE data fetcher
-    pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE", date)
-    print(pse_fetcher.fetch_data())
-
-    # Create a TGE data fetcher
-    tge_fetcher = data_fetcher_factory.create_data_fetcher("TGE", date)
-    print(tge_fetcher.fetch_data())
+    try:
+        # Create a TGE data fetcher
+        tge_fetcher = data_fetcher_factory.create_data_fetcher("TGE", date)
+        print(tge_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
