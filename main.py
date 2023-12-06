@@ -159,7 +159,7 @@ if __name__ == "__main__":
     data_fetcher_factory = DataFetcherFactory()
     try:
         # Create a PSE data fetcher
-        pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE", date)
+        pse_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
         print(pse_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     try:
         # Create a TGE data fetcher
-        tge_fetcher = data_fetcher_factory.create_data_fetcher("TGE", date)
+        tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
         print(tge_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
