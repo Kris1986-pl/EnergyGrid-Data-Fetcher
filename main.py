@@ -66,9 +66,9 @@ class PSEDataFetcher(DataFetcher):
             raise ValueError(f"UnicodeDecodeError: {e}")
 
 
-class TGEDataFetcher(DataFetcher):
+class DayAheadDataFetcher(DataFetcher):
     """
-        A data fetcher for retrieving data from TGE (Polish Power Exchange).
+        A data fetcher for retrieving data from TGE (Polish Power Exchange) - Day-Ahead Market.
 
         This class fetches electricity price data from the TGE website for a specific date
         and returns it as a pandas DataFrame.
@@ -146,8 +146,8 @@ class DataFetcherFactory:
         """
         if source == "PSE":
             return PSEDataFetcher(factory_date)
-        if source == "TGE":
-            return TGEDataFetcher(factory_date)
+        if source == "Day-Ahead":
+            return DayAheadDataFetcher(factory_date)
         else:
             raise ValueError("Invalid source specified")
 
