@@ -32,9 +32,10 @@ class DataFetcher(ABC):
         """
 
 
-class PSEDataFetcher(DataFetcher):
+class PSE5YearsPlanDataFetcher(DataFetcher):
     """
-        A data fetcher for retrieving data from Polskie Sieci Energetyczne (PSE).
+        A data fetcher for retrieving data from Polskie Sieci Energetyczne (PSE) -
+        Polish Power System Operation - Coordinated 5-years Plan - Basic data.
 
         This class fetches data for a specific date range and returns it as a pandas DataFrame.
 
@@ -144,8 +145,8 @@ class DataFetcherFactory:
         Raises:
             ValueError: If an invalid source is specified.
         """
-        if source == "PSE":
-            return PSEDataFetcher(factory_date)
+        if source == "PSE 5-years Plan":
+            return PSE5YearsPlanDataFetcher(factory_date)
         if source == "Day-Ahead":
             return DayAheadDataFetcher(factory_date)
         else:
