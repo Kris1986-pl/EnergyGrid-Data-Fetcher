@@ -99,6 +99,40 @@ class PSEBalancingMarketFetcher(DataFetcher):
         except UnicodeDecodeError as e:
             raise ValueError(f"UnicodeDecodeError: {e}")
 
+
+class PSECurrentDailyCoordinationPlanFetcher(DataFetcher):
+    """
+        A data fetcher for retrieving data from Polskie Sieci Energetyczne (PSE) -
+        Polish Power System Operation - Current Daily Coordination Plan - Basic data.
+
+        This class fetches data for a specific date range and returns it as a pandas DataFrame.
+
+        Args:
+            factory_date (datetime): The date for data fetching.
+
+        Methods:
+            fetch_data(): This method fetches data and returns a DataFrame.
+
+        Raises:
+            HTTPError: If there is an HTTP error while requesting data.
+            pd.errors.ParserError: If there is an error parsing the CSV data.
+    """
+
+    def fetch_data(self):
+        date = self.factory_date.strftime('%Y%m%d')
+
+        url = f"https://www.pse.pl/getcsv/-/export/csv/PL_BPKD/data/{date}"
+        try:
+            data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
+            return data
+        except HTTPError as e:
+            raise ValueError(f"HTTP Error {e.code}: {e.reason}")
+        except pd.errors.ParserError as e:
+            raise ValueError(f"Error parsing CSV data: {e}")
+        except UnicodeDecodeError as e:
+            raise ValueError(f"UnicodeDecodeError: {e}")
+
+
 class DayAheadDataFetcher(DataFetcher):
     """
         A data fetcher for retrieving data from TGE (Polish Power Exchange) - Day-Ahead Market.
@@ -181,6 +215,8 @@ class DataFetcherFactory:
             return PSE5YearsPlanDataFetcher(factory_date)
         if source == "PSE Balancing Market":
             return PSEBalancingMarketFetcher(factory_date)
+        if source == "PSE Current Daily Coordination Plan":
+            return PSECurrentDailyCoordinationPlanFetcher(factory_date)
         if source == "Day-Ahead":
             return DayAheadDataFetcher(factory_date)
         else:
@@ -188,7 +224,7 @@ class DataFetcherFactory:
 
 
 if __name__ == "__main__":
-    date = datetime(2023, 12, 8)
+    date = datetime(2023, 12, 12)
     # Example usage:
     data_fetcher_factory = DataFetcherFactory()
     try:
@@ -202,6 +238,15 @@ if __name__ == "__main__":
     try:
         # Create a PSE data fetcher
         pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
+        print(pse_bal_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
+
+    try:
+        # Create a PSE data fetcher
+        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
+            "PSE Current Daily Coordination Plan", date)
         print(pse_bal_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
