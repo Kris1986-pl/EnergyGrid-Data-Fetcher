@@ -192,6 +192,13 @@ class DayAheadDataFetcher(DataFetcher):
             raise ValueError(f"An unexpected error occurred: {e}")
 
 
+class IntraDayMarketFetcher(DataFetcher):
+    pass
+
+    def fetch_data(self):
+        pass
+
+
 class DataFetcherFactory:
     """
     Factory for creating data fetchers for different sources and dates.
