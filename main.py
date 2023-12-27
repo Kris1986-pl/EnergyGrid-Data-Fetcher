@@ -195,7 +195,16 @@ class DayAheadDataFetcher(DataFetcher):
 
 class IntraDayMarketFetcher(DataFetcher):
     """
-    
+    A data fetcher for retrieving data from TGE (Polish Power Exchange) - Intra Day Market.
+
+    This class fetches electricity price data from the TGE website for a specific date
+    and returns it as a pandas DataFrame.
+
+    Args:
+        factory_date (datetime): The date for data fetching.
+
+    Methods:
+        fetch_data(): This method fetches electricity price data and returns it as a DataFrame.
     """
 
     def fetch_data(self):
@@ -207,8 +216,8 @@ class IntraDayMarketFetcher(DataFetcher):
                     hour,
                     self.factory_date.strftime('%Y-%m-%d'))
                 r = get(url)
-                df = pd.DataFrame(r.json()['data'])
-                avg.append(np.average(df['kurs'], weights=df['volumen']))
+                data = pd.DataFrame(r.json()['data'])
+                avg.append(np.average(data['kurs'], weights=data['volumen']))
             except Exception as e:
                 avg.append(np.nan)
         for hour in range(10, 25):
@@ -218,8 +227,8 @@ class IntraDayMarketFetcher(DataFetcher):
                     hour,
                     self.factory_date.strftime('%Y-%m-%d'))
                 r = get(url)
-                df = pd.DataFrame(r.json()['data'])
-                avg.append(np.average(df['kurs'], weights=df['volumen']))
+                data = pd.DataFrame(r.json()['data'])
+                avg.append(np.average(data['kurs'], weights=data['volumen']))
             except Exception as e:
                 avg.append(np.nan)
         # Pobieranie danych z strony Rynku Dnia Bieżącego
@@ -277,20 +286,13 @@ class IntraDayMarketFetcher(DataFetcher):
         for i in range(24):
             rdb_avg.append(temp[i].split('>')[2].split('<')[0].replace(',', '.'))
 
-        df = pd.DataFrame([rdb_min, rdb_max, rdb_avg], index=['min', 'max', 'last'])
-        df = df.transpose()
-        # df['day'] = data_hist
-        # df = df.reset_index()
-        # df.rename(columns={'index': 'hour'}, inplace=True)
-        # df['hour'] = df['hour'].map(lambda x: x + 1)
-        # df['hour'] = df['hour'].map(lambda x: x if x != 24 else 0)
-        # df['time'] = pd.to_datetime(df['day'].astype(str) + df['hour'].map(lambda x: ' ' + str(x) + ':00'),
-        #                             format='%Y%m%d %H:%M')
-        df['date'] = self.factory_date.strftime('%Y-%m-%d')
-        df.set_index('date', inplace=True)
-        df.rename(columns={'min': 'cenaIntraMin', 'max': 'cenaIntraMax'}, inplace=True)
-        df['cenaIntraAvg'] = avg
-        return df[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax']]
+        data = pd.DataFrame([rdb_min, rdb_max, rdb_avg], index=['min', 'max', 'last'])
+        data = data.transpose()
+        data['date'] = self.factory_date.strftime('%Y-%m-%d')
+        data.set_index('date', inplace=True)
+        data.rename(columns={'min': 'cenaIntraMin', 'max': 'cenaIntraMax'}, inplace=True)
+        data['cenaIntraAvg'] = avg
+        return data[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax']]
 
 class DataFetcherFactory:
     """
@@ -329,38 +331,38 @@ if __name__ == "__main__":
     date = datetime(2023, 12, 27)
     # Example usage:
     data_fetcher_factory = DataFetcherFactory()
-    # try:
-    #     # Create a PSE data fetcher
-    #     pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
-    #     print(pse_5_fetcher.fetch_data())
-    # except ValueError as ve:
-    #     # Handle other ValueErrors
-    #     print(f"Error: {ve}")
-    #
-    # try:
-    #     # Create a PSE data fetcher
-    #     pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
-    #     print(pse_bal_fetcher.fetch_data())
-    # except ValueError as ve:
-    #     # Handle other ValueErrors
-    #     print(f"Error: {ve}")
-    #
-    # try:
-    #     # Create a PSE data fetcher
-    #     pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
-    #         "PSE Current Daily Coordination Plan", date)
-    #     print(pse_bal_fetcher.fetch_data())
-    # except ValueError as ve:
-    #     # Handle other ValueErrors
-    #     print(f"Error: {ve}")
-    #
-    # try:
-    #     # Create a TGE data fetcher
-    #     tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
-    #     print(tge_fetcher.fetch_data())
-    # except ValueError as ve:
-    #     # Handle other ValueErrors
-    #     print(f"Error: {ve}")
+    try:
+        # Create a PSE data fetcher
+        pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+        print(pse_5_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
+
+    try:
+        # Create a PSE data fetcher
+        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
+        print(pse_bal_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
+
+    try:
+        # Create a PSE data fetcher
+        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
+            "PSE Current Daily Coordination Plan", date)
+        print(pse_bal_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
+
+    try:
+        # Create a TGE data fetcher
+        tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
+        print(tge_fetcher.fetch_data())
+    except ValueError as ve:
+        # Handle other ValueErrors
+        print(f"Error: {ve}")
     try:
         # Create a TGE data fetcher
         tge_fetcher = data_fetcher_factory.create_data_fetcher("Intra-Day", date)
