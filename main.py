@@ -192,6 +192,103 @@ class DayAheadDataFetcher(DataFetcher):
             raise ValueError(f"An unexpected error occurred: {e}")
 
 
+class IntraDayMarketFetcher(DataFetcher):
+    """
+    
+    """
+
+    def fetch_data(self):
+        avg = []
+        for hour in range(1, 10):
+            try:
+                url = 'https://www.tge.pl/graph-days?targetId=IDM_{}_H0{}&dateStart={}&soapType=XBID&currency=pln&hour=max'.format(
+                    data_hist_y, hour,
+                    data_hist_Y)
+                r = requests.get(url)
+                df = pd.DataFrame(r.json()['data'])
+                avg.append(np.average(df['kurs'], weights=df['volumen']))
+            except Exception as e:
+                avg.append(np.nan)
+        for hour in range(10, 25):
+            try:
+                url = 'https://www.tge.pl/graph-days?targetId=IDM_{}_H{}&dateStart={}&soapType=XBID&currency=pln&hour=max'.format(
+                    data_hist_y, hour,
+                    data_hist_Y)
+                r = requests.get(url)
+                df = pd.DataFrame(r.json()['data'])
+                avg.append(np.average(df['kurs'], weights=df['volumen']))
+            except Exception as e:
+                avg.append(np.nan)
+        # Pobieranie danych z strony Rynku Dnia Bieżącego
+        link = 'https://www.tge.pl/energia-elektryczna-rdb?dateShow={}&dateAction=prev'.format(
+            data_hist)
+        print(link)
+
+        def gethtml(url):
+            try:
+                with closing(get(url, stream=False)) as resp:
+                    return resp
+                    if resp.status_code == 200 and resp.headers['content-type'] is not None:
+                        return resp
+                    return None
+            except Exception as e:
+                print(e)
+                # log_error('Error during requests to {0} : {1}'.format(url, str(e)))
+                return None
+
+        result = gethtml(link)
+
+        bs = BeautifulSoup(result.text, 'lxml')
+        body = []
+        for link in bs.find_all('tbody'):
+            body.append(link)
+
+        headings = []
+        for td in body[0].find_all('td'):
+            # remove any newlines and extra spaces from left and right
+            headings.append(td)
+
+        r = 2
+        temp = []
+        for i in range(24):
+            temp.append(str(headings[r]))
+            r += 11
+        rdb_min = []
+        for i in range(24):
+            rdb_min.append(temp[i].split('>')[2].split('<')[0].replace(',', '.'))
+
+        r = 3
+        temp = []
+        for i in range(24):
+            temp.append(str(headings[r]))
+            r += 11
+        rdb_max = []
+        for i in range(24):
+            rdb_max.append(temp[i].split('>')[2].split('<')[0].replace(',', '.'))
+        r = 4
+        temp = []
+        for i in range(24):
+            temp.append(str(headings[r]))
+            r += 11
+        rdb_avg = []
+        for i in range(24):
+            rdb_avg.append(temp[i].split('>')[2].split('<')[0].replace(',', '.'))
+
+        df = pd.DataFrame([rdb_min, rdb_max, rdb_avg], index=['min', 'max', 'last'])
+        df = df.transpose()
+        # df['day'] = data_hist
+        # df = df.reset_index()
+        # df.rename(columns={'index': 'hour'}, inplace=True)
+        # df['hour'] = df['hour'].map(lambda x: x + 1)
+        # df['hour'] = df['hour'].map(lambda x: x if x != 24 else 0)
+        # df['time'] = pd.to_datetime(df['day'].astype(str) + df['hour'].map(lambda x: ' ' + str(x) + ':00'),
+        #                             format='%Y%m%d %H:%M')
+        df['time'] = index_time
+        df.set_index('time', inplace=True)
+        df.rename(columns={'min': 'cenaIntraMin', 'max': 'cenaIntraMax'}, inplace=True)
+        df['cenaIntraAvg'] = avg
+        return df[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax']]
+
 class DataFetcherFactory:
     """
     Factory for creating data fetchers for different sources and dates.
