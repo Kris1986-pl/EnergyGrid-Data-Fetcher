@@ -177,13 +177,13 @@ class DayAheadDataFetcher(DataFetcher):
                                     float([price.get_text().strip().replace(',', '.')][0]))
                                 fixing += 7
                 data = pd.DataFrame(data=prices, columns=['price'])
-                data["date"] = self.factory_date.strftime('%Y-%m-%d')
+                data['date'] = self.factory_date.strftime('%Y-%m-%d')
                 # Convert the 'date' column to datetime format
                 data['date'] = pd.to_datetime(data['date'])
 
                 # Set the 'date' column as the index
                 data.set_index('date', inplace=True)
-
+                data['hour'] = list(range(1, 25))
                 return data
             else:
                 # Raise an exception when the response is None
@@ -234,7 +234,6 @@ class IntraDayMarketFetcher(DataFetcher):
         # Pobieranie danych z strony Rynku Dnia Bieżącego
         link = 'https://www.tge.pl/energia-elektryczna-rdb?dateShow={}&dateAction=prev'.format(
             self.factory_date.strftime('%d-%m-%Y'))
-        print(link)
 
         def gethtml(url):
             try:
@@ -292,7 +291,8 @@ class IntraDayMarketFetcher(DataFetcher):
         data.set_index('date', inplace=True)
         data.rename(columns={'min': 'cenaIntraMin', 'max': 'cenaIntraMax'}, inplace=True)
         data['cenaIntraAvg'] = avg
-        return data[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax']]
+        data['hour'] = list(range(1, 25))
+        return data[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax', 'hour']]
 
 class DataFetcherFactory:
     """
@@ -331,38 +331,38 @@ if __name__ == "__main__":
     date = datetime(2023, 12, 27)
     # Example usage:
     data_fetcher_factory = DataFetcherFactory()
-    try:
-        # Create a PSE data fetcher
-        pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
-        print(pse_5_fetcher.fetch_data())
-    except ValueError as ve:
-        # Handle other ValueErrors
-        print(f"Error: {ve}")
-
-    try:
-        # Create a PSE data fetcher
-        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
-        print(pse_bal_fetcher.fetch_data())
-    except ValueError as ve:
-        # Handle other ValueErrors
-        print(f"Error: {ve}")
-
-    try:
-        # Create a PSE data fetcher
-        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
-            "PSE Current Daily Coordination Plan", date)
-        print(pse_bal_fetcher.fetch_data())
-    except ValueError as ve:
-        # Handle other ValueErrors
-        print(f"Error: {ve}")
-
-    try:
-        # Create a TGE data fetcher
-        tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
-        print(tge_fetcher.fetch_data())
-    except ValueError as ve:
-        # Handle other ValueErrors
-        print(f"Error: {ve}")
+    # try:
+    #     # Create a PSE data fetcher
+    #     pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+    #     print(pse_5_fetcher.fetch_data())
+    # except ValueError as ve:
+    #     # Handle other ValueErrors
+    #     print(f"Error: {ve}")
+    #
+    # try:
+    #     # Create a PSE data fetcher
+    #     pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
+    #     print(pse_bal_fetcher.fetch_data())
+    # except ValueError as ve:
+    #     # Handle other ValueErrors
+    #     print(f"Error: {ve}")
+    #
+    # try:
+    #     # Create a PSE data fetcher
+    #     pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
+    #         "PSE Current Daily Coordination Plan", date)
+    #     print(pse_bal_fetcher.fetch_data())
+    # except ValueError as ve:
+    #     # Handle other ValueErrors
+    #     print(f"Error: {ve}")
+    #
+    # try:
+    #     # Create a TGE data fetcher
+    #     tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
+    #     print(tge_fetcher.fetch_data())
+    # except ValueError as ve:
+    #     # Handle other ValueErrors
+    #     print(f"Error: {ve}")
     try:
         # Create a TGE data fetcher
         tge_fetcher = data_fetcher_factory.create_data_fetcher("Intra-Day", date)
