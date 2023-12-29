@@ -14,8 +14,6 @@ except ValueError as ve:
     # Handle other ValueErrors
     print(f"Error: {ve}")
 
-# Until I fixed issue 17 I use this bypass
-df["hour"] = list(range(1, 25))
 # Create chart
 fig = px.scatter(df, x="hour", y="price", title=str(date))
 
