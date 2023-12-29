@@ -13,6 +13,7 @@ This Python project provides a set of data fetchers for retrieving electricity-r
   - [PSEBalancingMarketFetcher](#psebalancingmarketfetcher)
   - [PSECurrentDailyCoordinationPlanFetcher](#psecurrentdailycoordinationplanfetcher)
   - [DayAheadDataFetcher](#dayaheaddatafetcher)
+  - [IntraDayDataFetcher](#intradaydatafetcher)
 - [DataFetcherFactory](#datafetcherfactory)
 - [Examples](#examples)
 
