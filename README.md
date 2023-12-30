@@ -13,6 +13,7 @@ This Python project provides a set of data fetchers for retrieving electricity-r
   - [PSEBalancingMarketFetcher](#psebalancingmarketfetcher)
   - [PSECurrentDailyCoordinationPlanFetcher](#psecurrentdailycoordinationplanfetcher)
   - [DayAheadDataFetcher](#dayaheaddatafetcher)
+  - [IntraDayMarketFetcher](#intradaymarketfetcher)
 - [DataFetcherFactory](#datafetcherfactory)
 - [Examples](#examples)
 
@@ -46,43 +47,44 @@ PIPENV_VENV_IN_PROJECT=1 pipenv install
 ```bash
 pipenv shell
 ```
-5. Create .env file:
-```bash
-touch .venv 
-```
-##Data Fetchers
 
-##PSE5YearsPlanDataFetcher
+## Data Fetchers
+
+## PSE5YearsPlanDataFetcher
 This data fetcher retrieves data from Polskie Sieci Energetyczne (PSE) for the Coordinated 5-years Plan.
 * **fetch_data():** Fetches data and returns a pandas DataFrame.
-##PSEBalancingMarketFetcher
+##P SEBalancingMarketFetcher
 This data fetcher retrieves data from PSE for Balancing Market Operation - Energy & Prices on Balancing Market.
 * **fetch_data():** Fetches data and returns a pandas DataFrame.
-##PSECurrentDailyCoordinationPlanFetcher
+## PSECurrentDailyCoordinationPlanFetcher
 This data fetcher retrieves data from PSE for the Current Daily Coordination Plan.
 * **fetch_data():** Fetches data and returns a pandas DataFrame.
-##DayAheadDataFetcher
+## DayAheadDataFetcher
 This data fetcher retrieves data from the Polish Power Exchange (TGE) for the Day-Ahead Market.
 * **fetch_data():** Fetches electricity price data and returns it as a DataFrame.
-##DataFetcherFactory
+## IntraDayMarketFetcher
+This data fetcher retrieves data from the Polish Power Exchange (TGE) for the Intra Day Market.
+* **fetch_data():** Fetches electricity price data and returns it as a DataFrame.
+## DataFetcherFactory
 The DataFetcherFactory class is a factory for creating data fetchers for different sources and dates.
 * **create_data_fetcher(source: str, factory_date: datetime):** Creates a data fetcher for the specified source and date.
-##Examples
+## Examples
+
 ```python
 from datetime import datetime
-from main import DataFetcherFactory
+from fecher import DataFetcherFactory
 
 # Example usage:
 date = datetime(2023, 12, 12)
 data_fetcher_factory = DataFetcherFactory()
 
 try:
-    # Create a PSE data fetcher
-    pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
-    print(pse_5_fetcher.fetch_data())
+  # Create a PSE data fetcher
+  pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+  print(pse_5_fetcher.fetch_data())
 except ValueError as ve:
-    # Handle other ValueErrors
-    print(f"Error: {ve}")
+  # Handle other ValueErrors
+  print(f"Error: {ve}")
 
 # ... Repeat the above try-except blocks for other data fetchers
 
