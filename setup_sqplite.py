@@ -41,6 +41,15 @@ def setup_command():
                     'ExcessCapacityAboveDemand DECIMAL(10, 2),'  # Rezerwa mocy ponad zapotrzebowanie             
                     'ExcessCapacityBelowDemand DECIMAL(10, 2),'  # Rezerwa mocy poniżej zapotrzebowania                          
                     'TotalCapacityFromUtilizedLoadReductionOffers_JGOa DECIMAL(10, 2))')  # Suma mocy z wykorzystanych Ofert Redukcji Obciążenia JGOa
+    db.create_table('CREATE TABLE balancing_market '
+                    '(intra_day_id INTEGER PRIMARY KEY AUTOINCREMENT, '
+                    'date_id INTEGER REFERENCES date(data_id),'
+                    'hour_of_day INTEGER,'
+                    'CRO DECIMAL(10, 2),'
+                    'CROs DECIMAL(10, 2),'
+                    'CROz DECIMAL(10, 2),'
+                    'AggregatedMarketParticipantsContractingStatus DECIMAL(10, 2),'  # Stan zakontraktowania
+                    'Imbalance DECIMAL(10, 2))')  # Niezbilansowanie
 
 
 if __name__ == "__main__":
