@@ -1,6 +1,6 @@
 import plotly.express as px
 from datetime import datetime
-from fecher import DataFetcherFactory
+from fetcher import DataFetcherFactory
 
 # Example usage:
 date = datetime.now()

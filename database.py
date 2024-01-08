@@ -9,6 +9,10 @@ class Database:
     def __del__(self):
         self.connection.close()
 
-    def create_table(self, sql: str):
+    def insert_data(self, sql: str):
         self.cursor.execute(sql)
         self.connection.commit()
+
+    def select_data(self, sql: str):
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()

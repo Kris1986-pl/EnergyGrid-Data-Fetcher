@@ -5,21 +5,23 @@ import sqlite3
 def setup_command():
     try:
         db = Database("energy.db")
-        db.create_table('CREATE TABLE date '
+        db.insert_data('CREATE TABLE date '
                         '(date_id INTEGER PRIMARY KEY AUTOINCREMENT, '
-                        'date_value DATE)')
-        db.create_table('CREATE TABLE day_ahead '
+                        'date_value DATE UNIQUE)')
+        db.insert_data('CREATE TABLE day_ahead '
                         '(day_ahead_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
-                        'price DECIMAL(10, 2))')
-        db.create_table('CREATE TABLE intra_day '
+                        'hour_of_day INTEGER,'
+                        'price DECIMAL(10, 2),'
+                        'UNIQUE (date_id, hour_of_day))')
+        db.insert_data('CREATE TABLE intra_day '
                         '(intra_day_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
                         'hour_of_day INTEGER,'
                         'intraday_avg_price DECIMAL(10, 2),'
                         'intraday_min_price DECIMAL(10, 2),'
                         'intraday_max_price DECIMAL(10, 2))')
-        db.create_table('CREATE TABLE current_daily_plan '
+        db.insert_data('CREATE TABLE current_daily_plan '
                         '(current_daily_plan_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
                         'hour_of_day INTEGER,'
@@ -43,7 +45,7 @@ def setup_command():
                         'ExcessCapacityAboveDemand DECIMAL(10, 2),'  # Rezerwa mocy ponad zapotrzebowanie             
                         'ExcessCapacityBelowDemand DECIMAL(10, 2),'  # Rezerwa mocy poniżej zapotrzebowania                          
                         'TotalCapacityFromUtilizedLoadReductionOffers_JGOa DECIMAL(10, 2))')  # Suma mocy z wykorzystanych Ofert Redukcji Obciążenia JGOa
-        db.create_table('CREATE TABLE balancing_market '
+        db.insert_data('CREATE TABLE balancing_market '
                         '(balancing_market_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
                         'hour_of_day INTEGER,'
@@ -52,7 +54,7 @@ def setup_command():
                         'CROz DECIMAL(10, 2),'
                         'AggregatedMarketParticipantsContractingStatus DECIMAL(10, 2),'  # Stan zakontraktowania
                         'Imbalance DECIMAL(10, 2))')  # Niezbilansowanie
-        db.create_table('CREATE TABLE five_years_plan '
+        db.insert_data('CREATE TABLE five_years_plan '
                         '(five_years_plan_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
                         'hour_of_day INTEGER,'
