@@ -149,8 +149,12 @@ class DayAheadDataFetcher(DataFetcher):
     """
 
     def fetch_data(self):
+        # Subtract 1 day from the date because the service provides data that is 1 day ahead."
+        self.factory_date = self.factory_date - timedelta(days=1)
         url = f"https://www.tge.pl/energia-elektryczna-rdn?dateShosw=" \
               f"{self.factory_date.strftime('%d-%m-%Y')}&dateAction=next"
+        # Recall the subtraction
+        self.factory_date = self.factory_date + timedelta(days=1)
 
         def get_html(url):
             try:
