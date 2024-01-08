@@ -72,19 +72,19 @@ The DataFetcherFactory class is a factory for creating data fetchers for differe
 
 ```python
 from datetime import datetime
-from fecher import DataFetcherFactory
+from fetcher import DataFetcherFactory
 
 # Example usage:
 date = datetime(2023, 12, 12)
 data_fetcher_factory = DataFetcherFactory()
 
 try:
-  # Create a PSE data fetcher
-  pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
-  print(pse_5_fetcher.fetch_data())
+    # Create a PSE data fetcher
+    pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+    print(pse_5_fetcher.fetch_data())
 except ValueError as ve:
-  # Handle other ValueErrors
-  print(f"Error: {ve}")
+    # Handle other ValueErrors
+    print(f"Error: {ve}")
 
 # ... Repeat the above try-except blocks for other data fetchers
 
