@@ -56,4 +56,6 @@ if __name__ == "__main__":
     # Save date which was fetched from Day Ahead
     insert_day_ahead(DB, df_da)
 
-
+    # # Intra Day
+    # df_intra = fetch_data(DATE, "Intra-Day")
+    # print(df_intra)
