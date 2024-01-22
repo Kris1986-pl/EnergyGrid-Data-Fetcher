@@ -43,7 +43,7 @@ def insert_date(db: Database, data: pd.DataFrame):
        Status messages regarding the success or failure of the operation.
    """
     query = insert_date_query = f"INSERT INTO date (date_value) " \
-                                f"VALUES ('{df_da.index[0].strftime('%Y-%m-%d')}')"
+                                f"VALUES ('{data.index[0].strftime('%Y-%m-%d')}')"
     try:
         db.insert_data(query)
         print(f"Date {data.index[0].strftime('%Y-%m-%d')} save correctly")
