@@ -20,7 +20,8 @@ def setup_command():
                         'hour_of_day INTEGER,'
                         'intraday_avg_price DECIMAL(10, 2),'
                         'intraday_min_price DECIMAL(10, 2),'
-                        'intraday_max_price DECIMAL(10, 2))')
+                        'intraday_max_price DECIMAL(10, 2),'
+                        'UNIQUE (date_id, hour_of_day))')
         db.insert_data('CREATE TABLE current_daily_plan '
                         '(current_daily_plan_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
@@ -44,7 +45,8 @@ def setup_command():
                         'NationalNonParallelExchangeBalance DECIMAL(10, 2),'  # Krajowe saldo wymiany międzysystemowej nierównoległej                   
                         'ExcessCapacityAboveDemand DECIMAL(10, 2),'  # Rezerwa mocy ponad zapotrzebowanie             
                         'ExcessCapacityBelowDemand DECIMAL(10, 2),'  # Rezerwa mocy poniżej zapotrzebowania                          
-                        'TotalCapacityFromUtilizedLoadReductionOffers_JGOa DECIMAL(10, 2))')  # Suma mocy z wykorzystanych Ofert Redukcji Obciążenia JGOa
+                        'TotalCapacityFromUtilizedLoadReductionOffers_JGOa DECIMAL(10, 2),'  # Suma mocy z wykorzystanych Ofert Redukcji Obciążenia JGOa
+                        'UNIQUE (date_id, hour_of_day))')
         db.insert_data('CREATE TABLE balancing_market '
                         '(balancing_market_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
@@ -53,7 +55,8 @@ def setup_command():
                         'CROs DECIMAL(10, 2),'
                         'CROz DECIMAL(10, 2),'
                         'AggregatedMarketParticipantsContractingStatus DECIMAL(10, 2),'  # Stan zakontraktowania
-                        'Imbalance DECIMAL(10, 2))')  # Niezbilansowanie
+                        'Imbalance DECIMAL(10, 2),'  # Niezbilansowanie
+                        'UNIQUE (date_id, hour_of_day))')
         db.insert_data('CREATE TABLE five_years_plan '
                         '(five_years_plan_id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'date_id INTEGER REFERENCES date(data_id),'
@@ -72,7 +75,8 @@ def setup_command():
                         'ForecastedUnavailabilityTransmissionAndDistribution DECIMAL(10, 2),'  # Prognozowana wielkość niedyspozycyjności wynikająca z ograniczeń sieciowych występujących w sieci przesyłowej oraz sieci dystrybucyjnej w zakresie dostarczania energii elektrycznej
                         'GenerationCapacityUnavailabilityThermalUnitsBalancingMarket DECIMAL(10, 2),'  # Prognozowana wielkość niedyspozycyjności wynikających z warunków eksploatacyjnych JW świadczących usługi bilansujące w ramach RB
                         'PredictedGenerationNonCoveredByCapacityMarketObligation DECIMAL(10, 2),'  # Przewidywana generacja zasobów wytwórczych nieobjętych obowiązkami mocowymi
-                        'CapacityMarketObligationAllUnits DECIMAL(10, 2))')  # Obowiązki mocowe wszystkich jednostek rynku mocy
+                        'CapacityMarketObligationAllUnits DECIMAL(10, 2),'  # Obowiązki mocowe wszystkich jednostek rynku mocy
+                        'UNIQUE (date_id, hour_of_day))')
     except sqlite3.Error as e:
         print(f"Error creating table: {e}")
     finally:
