@@ -292,6 +292,8 @@ class IntraDayMarketFetcher(DataFetcher):
         data = pd.DataFrame([rdb_min, rdb_max, rdb_avg], index=['min', 'max', 'last'])
         data = data.transpose()
         data['date'] = self.factory_date.strftime('%Y-%m-%d')
+        # Convert the 'date' column to datetime format
+        data['date'] = pd.to_datetime(data['date'])
         data.set_index('date', inplace=True)
         data.rename(columns={'min': 'cenaIntraMin', 'max': 'cenaIntraMax'}, inplace=True)
         data['cenaIntraAvg'] = avg
