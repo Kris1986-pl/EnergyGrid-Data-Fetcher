@@ -9,8 +9,20 @@ from fetcher import DataFetcherFactory
 
 
 def fetch_data(date: datetime, name: str) -> DataFetcherFactory:
+    """
+    Fetches data using a DataFetcherFactory based on the specified date and name.
+
+    Args:
+        date (datetime): The date for which to fetch the data.
+        name (str): The name of the data source.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing data from the specified source and date.
+
+    Raises:
+        ValueError: If there is an error creating the data fetcher.
+    """
     try:
-        # Create a Day-Ahead data fetcher
         data_fetcher_factory = DataFetcherFactory()
         fetcher = data_fetcher_factory.create_data_fetcher(name, date)
         return fetcher.fetch_data()
@@ -20,6 +32,16 @@ def fetch_data(date: datetime, name: str) -> DataFetcherFactory:
 
 
 def insert_date(db: Database, data: pd.DataFrame):
+    """
+   Inserts date information into the database.
+
+   Args:
+       db (Database): The database instance.
+       data (pd.DataFrame): The DataFrame containing date information.
+
+   Prints:
+       Status messages regarding the success or failure of the operation.
+   """
     query = insert_date_query = f"INSERT INTO date (date_value) " \
                                 f"VALUES ('{df_da.index[0].strftime('%Y-%m-%d')}')"
     try:
@@ -30,6 +52,16 @@ def insert_date(db: Database, data: pd.DataFrame):
 
 
 def insert_day_ahead(db: Database, data: pd.DataFrame):
+    """
+    Inserts Day Ahead data into the database.
+
+    Args:
+        db (Database): The database instance.
+        data (pd.DataFrame): The DataFrame containing Day Ahead data.
+
+    Prints:
+        Status messages regarding the success or failure of the operation.
+    """
     query = f"SELECT date_id " \
             f"FROM date " \
             f"WHERE date_value = '{df_da.index[0].strftime('%Y-%m-%d')}'"
@@ -46,6 +78,16 @@ def insert_day_ahead(db: Database, data: pd.DataFrame):
 
 
 def insert_intra(db: Database, data: pd.DataFrame):
+    """
+    Inserts Intra Day data into the database.
+
+    Args:
+        db (Database): The database instance.
+        data (pd.DataFrame): The DataFrame containing Intra Day data.
+
+    Prints:
+        Status messages regarding the success or failure of the operation.
+    """
     query = f"SELECT date_id " \
             f"FROM date " \
             f"WHERE date_value = '{data.index[0].strftime('%Y-%m-%d')}'"
