@@ -59,6 +59,11 @@ class PSE5YearsPlanDataFetcher(DataFetcher):
               f"data_do/{next_date}"
         try:
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
+            # print(data['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB'].head(24))
+            data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
+                data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"].str.replace('\xa0', '')
+            data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
+                pd.to_numeric( data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"], errors='coerce')
             data['Doba'] = pd.to_datetime(data['Doba'])
             data.set_index('Doba', inplace=True)
             return data.head(24)
