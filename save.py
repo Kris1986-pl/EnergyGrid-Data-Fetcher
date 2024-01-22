@@ -106,6 +106,18 @@ def insert_intra(db: Database, data: pd.DataFrame):
         print(f"Date: {df_intra.index[0].strftime('%Y-%m-%d')} already exist in Intra Day table")
 
 
+def insert_pse_5(db: Database, data: pd.DataFrame):
+    pass
+
+
+def insert_pse_bal(db: Database, data: pd.DataFrame):
+    pass
+
+
+def insert_pse_current(db: Database, data: pd.DataFrame):
+    pass
+
+
 if __name__ == "__main__":
     DATE = datetime.now()
     DB = Database("energy.db")
@@ -121,6 +133,6 @@ if __name__ == "__main__":
     # Intra Day
     df_intra = fetch_data(DATE, "Intra-Day")
     # Save date which was fetched from Intra Day
-    insert_date(DB, df_da)
+    insert_date(DB, df_intra)
     # Save data which was fetched from Intra Day
     insert_intra(DB, df_intra)
