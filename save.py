@@ -103,11 +103,64 @@ def insert_intra(db: Database, data: pd.DataFrame):
             DB.insert_data(insert_query)
         print("Data from Intra Day saved correctly.")
     except sqlite3.IntegrityError:
-        print(f"Date: {df_intra.index[0].strftime('%Y-%m-%d')} already exist in Intra Day table")
+        print(f"Date: {data.index[0].strftime('%Y-%m-%d')} already exist in Intra Day table")
 
 
 def insert_pse_5(db: Database, data: pd.DataFrame):
-    pass
+    """
+        Inserts PSE (Polish Power Exchange) five-years plan data into the database.
+
+        Args:
+            db (Database): The database instance.
+            data (pd.DataFrame): The DataFrame containing PSE five-years plan data.
+
+        Prints:
+            Status messages regarding the success or failure of the operation.
+        """
+    query = f"SELECT date_id " \
+            f"FROM date " \
+            f"WHERE date_value = '{data.index[0].strftime('%Y-%m-%d')}'"
+    date = db.select_data(query)
+    date_id = date[0][0]
+    try:
+        for index, row in data.iterrows():
+            insert_query = f"INSERT INTO five_years_plan (hour_of_day, " \
+                           f"date_id, GridDemandForecast, " \
+                           f"RequiredPowerReserve, " \
+                           f"SurplusCapacityAvailableForTSO, " \
+                           f"GenerationCapacitySurplusForTSO, " \
+                           f"AvailableCapacityBalancingMarketUnits, " \
+                           f"AvailableForTSOCapacityBalancingMarketUnits, " \
+                           f"PredictedGenerationBalancingMarket, " \
+                           f"ForecastedGenerationNonBalancingMarket, " \
+                           f"WindTotalGenerationForecast, " \
+                           f"PhotovoltaicTotalGenerationForecast, " \
+                           f"PlannedCrossBorderElectricityExchange, " \
+                           f"ForecastedUnavailabilityTransmissionAndDistribution, " \
+                           f"GenerationCapacityUnavailabilityThermalUnitsBalancingMarket, " \
+                           f"PredictedGenerationNonCoveredByCapacityMarketObligation, " \
+                           f"CapacityMarketObligationAllUnits) " \
+                           f"VALUES ('{row['Godzina']}', " \
+                           f"{date_id}, " \
+                           f"{row['Prognozowane zapotrzebowanie sieci']}, " \
+                           f"{row['Wymagana rezerwa mocy OSP']}, " \
+                           f"{row['Nadwyฟka mocy dost๊pna dla OSP (7) + (9) - [(3) - (12)] - (13)']}, " \
+                           f"{row['Nadwyฟka mocy dost๊pna dla OSP ponad wymaganน rezerw๊ moc (5) - (4)']}, " \
+                           f"{row['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB']}, " \
+                           f"{row['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP']}, " \
+                           f"{row['Przewidywana generacja JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB (3) - (9)']}, " \
+                           f"{row['Prognozowana generacja JW i magazyn๓w energii nie wiadczนcych usณug bilansujนcych w ramach RB']}, " \
+                           f"{row['Prognozowana sumaryczna generacja r๓deณ wiatrowych']}, " \
+                           f"{row['Prognozowana sumaryczna generacja r๓deณ fotowoltaicznych']}, " \
+                           f"{row['Planowane saldo wymiany mi๊dzysystemowej']}, " \
+                           f"{row['Prognozowana wielkoๆ niedyspozycyjnoci wynikajนca z ogranicze๑ sieciowych wyst๊pujนcych w sieci przesyณowej oraz sieci dystrybucyjnej w zakresie dostarczania energii elektrycznej']}, " \
+                           f"{row['Prognozowana wielkoๆ niedyspozycyjnoci wynikajนcych z warunk๓w eksploatacyjnych JW wiadczนcych usณugi bilansujนce w ramach RB']}, " \
+                           f"{row['Przewidywana generacja zasob๓w wytw๓rczych nieobj๊tych obowiนzkami mocowymi']}, " \
+                           f"{row['Obowiนzki mocowe wszystkich jednostek rynku mocy']})"
+            DB.insert_data(insert_query)
+        print("Data from PSE five-years plan saved correctly.")
+    except sqlite3.IntegrityError:
+        print(f"Date: {data.index[0].strftime('%Y-%m-%d')} already exist in PSE five-years plan table")
 
 
 def insert_pse_bal(db: Database, data: pd.DataFrame):
@@ -123,16 +176,23 @@ if __name__ == "__main__":
     DB = Database("energy.db")
     SQLITE_PATH = 'energy.db'
 
-    # Day Ahead
-    df_da = fetch_data(DATE, "Day-Ahead")
-    # Save date which was fetched from Day Ahead
-    insert_date(DB, df_da)
-    # Save data which was fetched from Day Ahead
-    insert_day_ahead(DB, df_da)
+    # # Day Ahead
+    # df_da = fetch_data(DATE, "Day-Ahead")
+    # # Save date which was fetched from Day Ahead
+    # insert_date(DB, df_da)
+    # # Save data which was fetched from Day Ahead
+    # insert_day_ahead(DB, df_da)
+    #
+    # # Intra Day
+    # df_intra = fetch_data(DATE, "Intra-Day")
+    # # Save date which was fetched from Intra Day
+    # insert_date(DB, df_intra)
+    # # Save data which was fetched from Intra Day
+    # insert_intra(DB, df_intra)
 
-    # Intra Day
-    df_intra = fetch_data(DATE, "Intra-Day")
-    # Save date which was fetched from Intra Day
-    insert_date(DB, df_intra)
-    # Save data which was fetched from Intra Day
-    insert_intra(DB, df_intra)
+    # PSE 5-years Plan
+    df_pse_5 = fetch_data(DATE, "PSE 5-years Plan")
+    # Save date which was fetched from PSE 5-years Plan
+    insert_date(DB, df_pse_5)
+    # Save data which was fetched from PSE 5-years Plan
+    insert_pse_5(DB, df_pse_5)
