@@ -44,6 +44,7 @@ def insert_day_ahead(db: Database, data: pd.DataFrame):
     except sqlite3.IntegrityError:
         print(f"Date: {data.index[0].strftime('%Y-%m-%d')} already exist in Day Ahead table")
 
+
 def insert_intra(db: Database, data: pd.DataFrame):
     query = f"SELECT date_id " \
             f"FROM date " \
@@ -57,7 +58,6 @@ def insert_intra(db: Database, data: pd.DataFrame):
         for index, row in data.iterrows():
             insert_query = f"INSERT INTO intra_day (hour_of_day, date_id, intraday_avg_price, intraday_min_price, intraday_max_price) " \
                            f"VALUES ('{row['hour']}', {date_id}, {row['cenaIntraAvg']}, {row['cenaIntraMin']}, {row['cenaIntraMax']})"
-            print(insert_query)
             DB.insert_data(insert_query)
         print("Data from Intra Day saved correctly.")
     except sqlite3.IntegrityError:
@@ -70,13 +70,15 @@ if __name__ == "__main__":
     SQLITE_PATH = 'energy.db'
 
     # Day Ahead
-    # Save date which was fetched from Day Ahead
     df_da = fetch_data(DATE, "Day-Ahead")
-    insert_date(DB, df_da)
     # Save date which was fetched from Day Ahead
+    insert_date(DB, df_da)
+    # Save data which was fetched from Day Ahead
     insert_day_ahead(DB, df_da)
 
     # Intra Day
-    # Save date which was fetched from Intra Day
     df_intra = fetch_data(DATE, "Intra-Day")
+    # Save date which was fetched from Intra Day
+    insert_date(DB, df_da)
+    # Save data which was fetched from Intra Day
     insert_intra(DB, df_intra)
