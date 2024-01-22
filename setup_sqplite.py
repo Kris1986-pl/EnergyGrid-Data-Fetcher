@@ -59,7 +59,7 @@ def setup_command():
                         'date_id INTEGER REFERENCES date(data_id),'
                         'hour_of_day INTEGER,'
                         'GridDemandForecast DECIMAL(10, 2),'  # Prognozowane zapotrzebowanie sieci
-                        'RequiredPowerReserve DECIMAL(10, 2),'  # Prognozowane zapotrzebowanie sieci
+                        'RequiredPowerReserve DECIMAL(10, 2),'  # Wymagana rezerwa mocy OSP
                         'SurplusCapacityAvailableForTSO DECIMAL(10, 2),'  # Nadwyżka mocy dostępna dla OSP (7) + (9) - [(3) - (12)] - (13)
                         'GenerationCapacitySurplusForTSO DECIMAL(10, 2),'  # Nadwyżka mocy dostępna dla OSP ponad wymaganą rezerwę moc (5) - (4)
                         'AvailableCapacityBalancingMarketUnits DECIMAL(10, 2),'  # Moc dyspozycyjna JW i magazynów energii świadczących usługi bilansujące w ramach RB
