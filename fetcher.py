@@ -59,6 +59,8 @@ class PSE5YearsPlanDataFetcher(DataFetcher):
               f"data_do/{next_date}"
         try:
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
+            data['Doba'] = pd.to_datetime(data['Doba'])
+            data.set_index('Doba', inplace=True)
             return data.head(24)
         except HTTPError as e:
             raise ValueError(f"HTTP Error {e.code}: {e.reason}")
