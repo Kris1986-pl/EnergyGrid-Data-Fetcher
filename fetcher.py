@@ -135,6 +135,8 @@ class PSECurrentDailyCoordinationPlanFetcher(DataFetcher):
         url = f"https://www.pse.pl/getcsv/-/export/csv/PL_BPKD/data/{date}"
         try:
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
+            data['Data'] = pd.to_datetime(data['Data'])
+            data.set_index('Data', inplace=True)
             return data
         except HTTPError as e:
             raise ValueError(f"HTTP Error {e.code}: {e.reason}")
