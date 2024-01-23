@@ -10,7 +10,6 @@ from requests import get
 import pandas as pd
 from bs4 import BeautifulSoup
 import numpy as np
-import chardet
 
 
 class DataFetcher(ABC):
@@ -99,11 +98,6 @@ class PSEBalancingMarketFetcher(DataFetcher):
 
         url = f"https://www.pse.pl/getcsv/-/export/csv/PL_CENY_NIEZB_RB/data/{date}"
         try:
-            response = get(url, headers={'Range': 'bytes=0-1000'})
-            content = response.content
-            result = chardet.detect(content)
-            encoding = result['encoding']
-
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
             data['Data'] = pd.to_datetime(data['Data'], format='%Y%m%d', errors='coerce')
             data.set_index('Data', inplace=True)
