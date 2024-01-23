@@ -93,7 +93,6 @@ def insert_intra(db: Database, data: pd.DataFrame):
             f"WHERE date_value = '{data.index[0].strftime('%Y-%m-%d')}'"
     date = db.select_data(query)
     date_id = date[0][0]
-    print(data)
     data.replace('-', "Null", inplace=True)
     data.replace(np.nan, "Null", inplace=True)
     try:
@@ -122,6 +121,8 @@ def insert_pse_5(db: Database, data: pd.DataFrame):
             f"WHERE date_value = '{data.index[0].strftime('%Y-%m-%d')}'"
     date = db.select_data(query)
     date_id = date[0][0]
+    data.replace('-', "Null", inplace=True)
+    data.replace(np.nan, "Null", inplace=True)
     try:
         for index, row in data.iterrows():
             insert_query = f"INSERT INTO five_years_plan (hour_of_day, " \
@@ -164,7 +165,33 @@ def insert_pse_5(db: Database, data: pd.DataFrame):
 
 
 def insert_pse_bal(db: Database, data: pd.DataFrame):
-    pass
+    query = f"SELECT date_id " \
+            f"FROM date " \
+            f"WHERE date_value = '{data.index[0].strftime('%Y-%m-%d')}'"
+    date = db.select_data(query)
+    date_id = date[0][0]
+    data.replace('-', "Null", inplace=True)
+    data.replace(np.nan, "Null", inplace=True)
+    try:
+        for index, row in data.iterrows():
+            insert_query = f"INSERT OR REPLACE INTO balancing_market (hour_of_day, " \
+                           f"date_id, " \
+                           f"CRO, " \
+                           f"CROs, " \
+                           f"CROz, " \
+                           f"AggregatedMarketParticipantsContractingStatus, " \
+                           f"Imbalance) " \
+                           f"VALUES ({row['Godzina']}, " \
+                           f"{date_id}, " \
+                           f"{row['CRO']}, " \
+                           f"{row['CROs']}, " \
+                           f"{row['CROz']}, " \
+                           f"{row['Stan zakontraktowania']}, " \
+                           f"{row['Niezbilansowanie']})"
+            DB.insert_data(insert_query)
+        print("Data from PSE Balancing Market saved correctly.")
+    except sqlite3.DatabaseError as e:
+        print(e)
 
 
 def insert_pse_current(db: Database, data: pd.DataFrame):
@@ -177,6 +204,7 @@ if __name__ == "__main__":
     SQLITE_PATH = 'energy.db'
 
     # # Day Ahead
+    # print("Day Ahead is beeing fetched...")
     # df_da = fetch_data(DATE, "Day-Ahead")
     # # Save date which was fetched from Day Ahead
     # insert_date(DB, df_da)
@@ -184,6 +212,7 @@ if __name__ == "__main__":
     # insert_day_ahead(DB, df_da)
     #
     # # Intra Day
+    # print("Intra Day is beeing fetched...")
     # df_intra = fetch_data(DATE, "Intra-Day")
     # # Save date which was fetched from Intra Day
     # insert_date(DB, df_intra)
@@ -191,8 +220,17 @@ if __name__ == "__main__":
     # insert_intra(DB, df_intra)
 
     # PSE 5-years Plan
+    print("PSE 5-years Plan is beeing fetched...")
     df_pse_5 = fetch_data(DATE, "PSE 5-years Plan")
     # Save date which was fetched from PSE 5-years Plan
     insert_date(DB, df_pse_5)
     # Save data which was fetched from PSE 5-years Plan
     insert_pse_5(DB, df_pse_5)
+
+    # PSE PSE Balancing Market
+    print("PSE Balancing Market is beeing fetched...")
+    df_bal = fetch_data(DATE, "PSE Balancing Market")
+    # Save date which was fetched from PSE Balancing Market
+    insert_date(DB, df_bal)
+    # Save data which was fetched from PSE Balancing Market
+    insert_pse_bal(DB, df_bal)
