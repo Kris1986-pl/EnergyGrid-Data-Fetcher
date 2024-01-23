@@ -44,6 +44,7 @@ def insert_date(db: Database, data: pd.DataFrame):
    """
     query = insert_date_query = f"INSERT INTO date (date_value) " \
                                 f"VALUES ('{data.index[0].strftime('%Y-%m-%d')}')"
+    print(query)
     try:
         db.insert_data(query)
         print(f"Date {data.index[0].strftime('%Y-%m-%d')} save correctly")
@@ -203,21 +204,21 @@ if __name__ == "__main__":
     DB = Database("energy.db")
     SQLITE_PATH = 'energy.db'
 
-    # # Day Ahead
-    # print("Day Ahead is beeing fetched...")
-    # df_da = fetch_data(DATE, "Day-Ahead")
-    # # Save date which was fetched from Day Ahead
-    # insert_date(DB, df_da)
-    # # Save data which was fetched from Day Ahead
-    # insert_day_ahead(DB, df_da)
-    #
-    # # Intra Day
-    # print("Intra Day is beeing fetched...")
-    # df_intra = fetch_data(DATE, "Intra-Day")
-    # # Save date which was fetched from Intra Day
-    # insert_date(DB, df_intra)
-    # # Save data which was fetched from Intra Day
-    # insert_intra(DB, df_intra)
+    # Day Ahead
+    print("Day Ahead is beeing fetched...")
+    df_da = fetch_data(DATE, "Day-Ahead")
+    # Save date which was fetched from Day Ahead
+    insert_date(DB, df_da)
+    # Save data which was fetched from Day Ahead
+    insert_day_ahead(DB, df_da)
+
+    # Intra Day
+    print("Intra Day is beeing fetched...")
+    df_intra = fetch_data(DATE, "Intra-Day")
+    # Save date which was fetched from Intra Day
+    insert_date(DB, df_intra)
+    # Save data which was fetched from Intra Day
+    insert_intra(DB, df_intra)
 
     # PSE 5-years Plan
     print("PSE 5-years Plan is beeing fetched...")
@@ -234,3 +235,11 @@ if __name__ == "__main__":
     insert_date(DB, df_bal)
     # Save data which was fetched from PSE Balancing Market
     insert_pse_bal(DB, df_bal)
+
+    # PSE PSE Balancing Market
+    print("PSE Current Daily Coordination Plan is beeing fetched...")
+    df_curr = fetch_data(DATE, "PSE Current Daily Coordination Plan")
+    # Save date which was fetched from PSE Balancing Market
+    insert_date(DB, df_curr)
+    # Save data which was fetched from PSE Balancing Market
+    # insert_pse_bal(DB, df_curr)
