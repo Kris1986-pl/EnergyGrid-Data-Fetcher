@@ -205,7 +205,7 @@ if __name__ == "__main__":
     SQLITE_PATH = 'energy.db'
 
     # Day Ahead
-    print("Day Ahead is beeing fetched...")
+    print("Day Ahead is being fetched...")
     df_da = fetch_data(DATE, "Day-Ahead")
     # Save date which was fetched from Day Ahead
     insert_date(DB, df_da)
@@ -213,7 +213,7 @@ if __name__ == "__main__":
     insert_day_ahead(DB, df_da)
 
     # Intra Day
-    print("Intra Day is beeing fetched...")
+    print("Intra Day is being fetched...")
     df_intra = fetch_data(DATE, "Intra-Day")
     # Save date which was fetched from Intra Day
     insert_date(DB, df_intra)
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     insert_intra(DB, df_intra)
 
     # PSE 5-years Plan
-    print("PSE 5-years Plan is beeing fetched...")
+    print("PSE 5-years Plan is being fetched...")
     df_pse_5 = fetch_data(DATE, "PSE 5-years Plan")
     # Save date which was fetched from PSE 5-years Plan
     insert_date(DB, df_pse_5)
@@ -229,7 +229,7 @@ if __name__ == "__main__":
     insert_pse_5(DB, df_pse_5)
 
     # PSE PSE Balancing Market
-    print("PSE Balancing Market is beeing fetched...")
+    print("PSE Balancing Market is being fetched...")
     df_bal = fetch_data(DATE, "PSE Balancing Market")
     # Save date which was fetched from PSE Balancing Market
     insert_date(DB, df_bal)
@@ -237,7 +237,7 @@ if __name__ == "__main__":
     insert_pse_bal(DB, df_bal)
 
     # PSE PSE Balancing Market
-    print("PSE Current Daily Coordination Plan is beeing fetched...")
+    print("PSE Current Daily Coordination Plan is being fetched...")
     df_curr = fetch_data(DATE, "PSE Current Daily Coordination Plan")
     # Save date which was fetched from PSE Balancing Market
     insert_date(DB, df_curr)
