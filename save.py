@@ -98,8 +98,17 @@ def insert_intra(db: Database, data: pd.DataFrame):
     data.replace(np.nan, "Null", inplace=True)
     try:
         for index, row in data.iterrows():
-            insert_query = f"INSERT INTO intra_day (hour_of_day, date_id, intraday_avg_price, intraday_min_price, intraday_max_price) " \
-                           f"VALUES ('{row['hour']}', {date_id}, {row['cenaIntraAvg']}, {row['cenaIntraMin']}, {row['cenaIntraMax']})"
+            insert_query = f"INSERT OR REPLACE INTO intra_day " \
+                           f"(hour_of_day, " \
+                           f"date_id, " \
+                           f"intraday_avg_price, " \
+                           f"intraday_min_price, " \
+                           f"intraday_max_price) " \
+                           f"VALUES ('{row['hour']}', " \
+                           f"{date_id}, " \
+                           f"{row['cenaIntraAvg']}, " \
+                           f"{row['cenaIntraMin']}, " \
+                           f"{row['cenaIntraMax']})"
             DB.insert_data(insert_query)
         print("Data from Intra Day saved correctly.")
     except sqlite3.IntegrityError:
