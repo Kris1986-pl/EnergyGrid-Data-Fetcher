@@ -137,6 +137,7 @@ class PSECurrentDailyCoordinationPlanFetcher(DataFetcher):
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
             data['Data'] = pd.to_datetime(data['Data'])
             data.set_index('Data', inplace=True)
+            data = data.apply(lambda col: col.str.replace(',', '.') if col.dtype == 'O' else col)
             return data
         except HTTPError as e:
             raise ValueError(f"HTTP Error {e.code}: {e.reason}")
