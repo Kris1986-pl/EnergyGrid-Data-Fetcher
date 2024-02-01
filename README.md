@@ -16,7 +16,9 @@ This Python project provides a set of data fetchers for retrieving electricity-r
   - [IntraDayMarketFetcher](#intradaymarketfetcher)
 - [DataFetcherFactory](#datafetcherfactory)
 - [Examples](#examples)
-
+- [Database](#database)
+  - [Setup Database][#setup database]
+  - [Inserting Data from External Services](#inserting data from external services)
 ## Requirements
 
 - Python 3.9 or higher
@@ -88,4 +90,17 @@ except ValueError as ve:
 
 # ... Repeat the above try-except blocks for other data fetchers
 
+```
+## Database
+
+### Setup Database
+This project utilizes the SQLite database management system (DBMS). To create the necessary tables, execute the following command in the terminal:
+
+```bash
+python setup_sqlite.py
+```
+### Inserting Data from External Services
+If you want to populate the database with data from external services, run the following command in the terminal:
+```bash
+python save.py
 ```
