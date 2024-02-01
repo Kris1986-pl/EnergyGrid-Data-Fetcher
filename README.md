@@ -28,7 +28,9 @@ This Python project provides a set of data fetchers for retrieving electricity-r
 
 The project is organized into several modules:
 
-- **main.py**: The main module for data fetching. It contains the implementation of data fetchers and a factory for creating them.
+- **fetcher.py**: The main module for data fetching. It contains the implementation of data fetchers and a factory for creating them.
+- **setup_sqlite.py** This script is responsible for setting up the SQLite database for the project.
+- **save.py** This script is designed to populate the SQLite database with data retrieved from external services.
 - **Pipfile**: Specifies project dependencies.
 - **README.md**: Project documentation.
 
@@ -39,11 +41,11 @@ git clone https://github.com/Kris1986-pl/EnergyGrid-Data-Fetcher.git
 ```
 2. Navigate to the project directory:
 ```bash
-cd EnergyGrid-Data-Fetcher-main
+cd EnergyGrid-Data-Fetcher
 ```
 3. Install the project dependencies using pipenv. Make sure to set the environment variable PIPENV_VENV_IN_PROJECT to 1 to create a virtual environment inside the project directory:
 ```bash
-PIPENV_VENV_IN_PROJECT=1 pipenv install
+pipenv install
 ```
 4. Activate the virtual environment:
 ```bash
