@@ -17,8 +17,8 @@ This Python project provides a set of data fetchers for retrieving electricity-r
 - [DataFetcherFactory](#datafetcherfactory)
 - [Examples](#examples)
 - [Database](#database)
-  - [Setup Database](#setup database)
-  - [Inserting Data from External Services](#inserting data from external services)
+  - [Setup Database](#setup-database)
+  - [Inserting Data from External Services](#inserting-data-from-external-services)
 ## Requirements
 
 - Python 3.9 or higher
