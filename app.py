@@ -73,6 +73,15 @@ def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
     return ordered_json_data
 
 
+@app.route("/days-ahead")
+def fetch_days_ahead():
+    query = "SELECT day_ahead_id, date_value, hour_of_day, price " \
+            "FROM day_ahead " \
+            "INNER JOIN date ON date.date_id = day_ahead.date_id"
+    return fetch_data_endpoint(query, 'days_head',
+                               ['id', 'date', 'hour', 'price'])
+
+
 @app.route("/intra-days")
 def fetch_intra_days():
     query = "SELECT intra_day_id, date_value, hour_of_day, " \
