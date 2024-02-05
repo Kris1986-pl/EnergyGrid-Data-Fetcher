@@ -45,7 +45,11 @@ def fetch_data_endpoint(query, endpoint_name, key_names):
     # Use json.dumps with sort_keys parameter
     ordered_json_data = json.dumps({f'{endpoint_name}_data': data}, sort_keys=False)
 
-    return ordered_json_data
+    # Set the content type to 'application/json'
+    response = jsonify(json.loads(ordered_json_data))
+    response.headers['Content-Type'] = 'application/json'
+
+    return response
 
 
 def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
@@ -70,7 +74,11 @@ def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
     # Use json.dumps with sort_keys parameter
     ordered_json_data = json.dumps({f'{endpoint_name}_data': data}, sort_keys=False)
 
-    return ordered_json_data
+    # Set the content type to 'application/json'
+    response = jsonify(json.loads(ordered_json_data))
+    response.headers['Content-Type'] = 'application/json'
+
+    return response
 
 
 @app.route("/days-ahead")
