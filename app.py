@@ -7,7 +7,7 @@ app = Flask(__name__)
 DATABASE = 'energy.db'
 
 
-def get_db():
+def get_db() -> Database:
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = Database(DATABASE)
@@ -16,7 +16,7 @@ def get_db():
 
 # Add your setup_command function here to create tables
 
-def fetch_data_endpoint(query, endpoint_name, key_names):
+def fetch_data_endpoint(query: str, endpoint_name: str, key_names: list[str]) -> jsonify:
     db = get_db()
     results = db.select_data(query)
 
@@ -44,7 +44,8 @@ def fetch_data_endpoint(query, endpoint_name, key_names):
     return response
 
 
-def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
+def fetch_data_endpoint_by_date(query: str, endpoint_name: str, key_names: list[str],
+                                date: str) -> jsonify:
     db = get_db()
     results = db.select_data_by_date(query, date)
 
