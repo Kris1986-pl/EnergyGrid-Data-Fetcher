@@ -8,6 +8,12 @@ DATABASE = 'energy.db'
 
 
 def get_db() -> Database:
+    """
+   Retrieve the database connection from the Flask application context.
+
+   Returns:
+   Database: The database connection.
+   """
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = Database(DATABASE)
@@ -17,6 +23,17 @@ def get_db() -> Database:
 # Add your setup_command function here to create tables
 
 def fetch_data_endpoint(query: str, endpoint_name: str, key_names: list[str]) -> jsonify:
+    """
+   Fetch data from the database based on the provided query and organize it by date.
+
+   Args:
+   query (str): SQL query to fetch data.
+   endpoint_name (str): Name of the endpoint.
+   key_names (list[str]): List of key names for the records.
+
+   Returns:
+   jsonify: Flask JSON response containing the organized data.
+   """
     db = get_db()
     results = db.select_data(query)
 
@@ -46,6 +63,19 @@ def fetch_data_endpoint(query: str, endpoint_name: str, key_names: list[str]) ->
 
 def fetch_data_endpoint_by_date(query: str, endpoint_name: str, key_names: list[str],
                                 date: str) -> jsonify:
+    """
+    Fetch data from the database based on the provided query, organize it by date,
+    and filter by a specific date.
+
+    Args:
+    query (str): SQL query to fetch data.
+    endpoint_name (str): Name of the endpoint.
+    key_names (list[str]): List of key names for the records.
+    date (str): Date to filter the results.
+
+    Returns:
+    jsonify: Flask JSON response containing the organized data for the specified date.
+    """
     db = get_db()
     results = db.select_data_by_date(query, date)
 
