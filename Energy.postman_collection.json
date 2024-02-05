@@ -1,0 +1,457 @@
+{
+	"info": {
+		"_postman_id": "22fb59b2-14f6-48e3-ae83-ff293dcff031",
+		"name": "Energy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24157713"
+	},
+	"item": [
+		{
+			"name": "days-ahead",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/days-ahead"
+			},
+			"response": []
+		},
+		{
+			"name": "days-ahead/:date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/days-ahead/:date",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"days-ahead",
+						":date"
+					],
+					"variable": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "intra-days",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/intra-days"
+			},
+			"response": []
+		},
+		{
+			"name": "intra-days/:date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/intra-days/:date",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"intra-days",
+						":date"
+					],
+					"variable": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "current-daily-plans",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/current-daily-plans"
+			},
+			"response": []
+		},
+		{
+			"name": "current-daily-plans/:date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/current-daily-plans/:date",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"current-daily-plans",
+						":date"
+					],
+					"variable": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "balancing-markets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/balancing-markets"
+			},
+			"response": []
+		},
+		{
+			"name": "balancing-markets/:date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/balancing-markets/:date",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"balancing-markets",
+						":date"
+					],
+					"variable": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "five-years-plans",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/five-years-plans"
+			},
+			"response": []
+		},
+		{
+			"name": "five-years-plans/:date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response list is not empty\", function () {",
+							"    pm.expect(pm.response.json()).is.not.empty;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100)",
+							"});",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/five-years-plans/:date",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"five-years-plans",
+						":date"
+					],
+					"variable": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		},
+		{
+			"key": "date",
+			"value": "2024-02-04",
+			"type": "string"
+		}
+	]
+}
