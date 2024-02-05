@@ -10,24 +10,15 @@ DATABASE = 'energy.db'
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = g._database = Database(DATABASE)
     return db
-
-
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
 
 
 # Add your setup_command function here to create tables
 
 def fetch_data_endpoint(query, endpoint_name, key_names):
     db = get_db()
-    cursor = db.cursor()
-    cursor.execute(query)
-    results = cursor.fetchall()
+    results = db.select_data(query)
 
     # Organize the data by date
     data_by_date = {}
@@ -55,9 +46,7 @@ def fetch_data_endpoint(query, endpoint_name, key_names):
 
 def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
     db = get_db()
-    cursor = db.cursor()
-    cursor.execute(query, (date,))
-    results = cursor.fetchall()
+    results = db.select_data_by_date(query, date)
 
     # Organize the data by date
     data_by_date = {}
