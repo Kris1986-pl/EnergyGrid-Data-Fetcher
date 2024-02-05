@@ -33,7 +33,8 @@ def fetch_data_endpoint(query, endpoint_name, key_names):
     data_by_date = {}
     for result in results:
         date_key = result[1]
-        record = {key_names[i]: result[i] for i in range(len(key_names))}
+        record = {key_names[i]: result[i] for i in range(len(key_names)) if
+                  key_names[i] is not "date"}
         if date_key in data_by_date:
             data_by_date[date_key].append(record)
         else:
@@ -62,7 +63,8 @@ def fetch_data_endpoint_by_date(query, endpoint_name, key_names, date):
     data_by_date = {}
     for result in results:
         date_key = result[1]
-        record = {key_names[i]: result[i] for i in range(len(key_names))}
+        record = {key_names[i]: result[i] for i in range(len(key_names)) if
+                  key_names[i] is not "date"}
         if date_key in data_by_date:
             data_by_date[date_key].append(record)
         else:
