@@ -19,7 +19,7 @@ This Python project provides a set of data fetchers for retrieving electricity-r
 - [Database](#database)
   - [Setup Database](#setup-database)
   - [Inserting Data from External Services](#inserting-data-from-external-services)
-- [API Documentation](#api-ocumentation)
+- [API Documentation](#api-documentation)
   - [Fetch all data](#fetch-all-data)
   - [Fetch data by a specific date](#fetch-data-by-a-specific-date)
 
