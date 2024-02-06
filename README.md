@@ -19,6 +19,10 @@ This Python project provides a set of data fetchers for retrieving electricity-r
 - [Database](#database)
   - [Setup Database](#setup-database)
   - [Inserting Data from External Services](#inserting-data-from-external-services)
+- [API Documentation](#api-ocumentation)
+  - [Fetch all data](#fetch-all-data)
+  - [Fetch data by a specific date](#fetch-data-by-a-specific-date)
+
 ## Requirements
 
 - Python 3.9 or higher
@@ -105,4 +109,60 @@ python setup_sqlite.py
 If you want to populate the database with data from external services, run the following command in the terminal:
 ```bash
 python save.py
+```
+
+# API Documentation
+
+## Overview
+
+This API provides access to energy-related data, including day-ahead prices, intra-day statistics, current daily plans, balancing market information, and five-years plans. The data is organized by date and hour.
+
+## Endpoints
+### Fetch all data
+#### Fetch Day-Ahead Data
+```plaintext
+GET /days-ahead
+```
+#### Fetch Intra Day Market
+```plaintext
+GET /intra-days
+```
+#### PSE 5-years Plan
+```plaintext
+GET /five-years-plans
+```
+#### PSE Balancing Market
+```plaintext
+GET /balancing-markets
+```
+#### PSE Current Daily Coordination Plan
+```plaintext
+GET /current-daily-plans
+```
+
+### Fetch data by a specific date
+#### Fetch Day-Ahead Data
+```plaintext
+GET /days-ahead/:date
+:date - Valid format: YYYY-MM-DD
+```
+#### Fetch Intra Day Market
+```plaintext
+GET /intra-days/:date
+:date - Valid format: YYYY-MM-DD
+```
+#### PSE 5-years Plan
+```plaintext
+GET /five-years-plans/:date
+:date - Valid format: YYYY-MM-DD
+```
+#### PSE Balancing Market
+```plaintext
+GET /balancing-markets/:date
+:date - Valid format: YYYY-MM-DD
+```
+#### PSE Current Daily Coordination Plan
+```plaintext
+GET /current-daily-plans/:date
+:date - Valid format: YYYY-MM-DD
 ```

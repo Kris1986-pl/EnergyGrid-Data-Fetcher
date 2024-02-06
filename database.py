@@ -16,3 +16,7 @@ class Database:
     def select_data(self, sql: str):
         self.cursor.execute(sql)
         return self.cursor.fetchall()
+
+    def select_data_by_date(self, sql: str, date: str):
+        self.cursor.execute(sql, (date,))
+        return self.cursor.fetchall()
