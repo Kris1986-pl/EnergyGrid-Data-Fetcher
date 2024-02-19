@@ -155,11 +155,11 @@ def insert_pse_5(db: Database, data: pd.DataFrame):
                            f"{date_id}, " \
                            f"{row['Prognozowane zapotrzebowanie sieci']}, " \
                            f"{row['Wymagana rezerwa mocy OSP']}, " \
-                           f"{row['Nadwyฟka mocy dost๊pna dla OSP (7) + (9) - [(3) - (12)] - (13)']}, " \
+                           f"{row['Nadwyฟka mocy dost๊pna dla OSP (8) + (10) - [(3)-(13)]-(14)']}, " \
                            f"{row['Nadwyฟka mocy dost๊pna dla OSP ponad wymaganน rezerw๊ moc (5) - (4)']}, " \
                            f"{row['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB']}, " \
                            f"{row['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP']}, " \
-                           f"{row['Przewidywana generacja JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB (3) - (9)']}, " \
+                           f"{row['Przewidywana generacja JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB (3) - (10) - (13)']}, " \
                            f"{row['Prognozowana generacja JW i magazyn๓w energii nie wiadczนcych usณug bilansujนcych w ramach RB']}, " \
                            f"{row['Prognozowana sumaryczna generacja r๓deณ wiatrowych']}, " \
                            f"{row['Prognozowana sumaryczna generacja r๓deณ fotowoltaicznych']}, " \
