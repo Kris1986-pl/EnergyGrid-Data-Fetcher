@@ -1,9 +1,11 @@
 from flask import Flask, g, jsonify
+from flask_cors import CORS
 import sqlite3
 import json
 from database import Database
 
 app = Flask(__name__)
+CORS(app)
 DATABASE = 'energy.db'
 
 
