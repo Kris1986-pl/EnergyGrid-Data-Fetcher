@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from database import Database
-from fetcher import DataFetcherFactory
+from fetcher import DataFetcherFactory, ServicesEnergy
 
 
 def fetch_data(date: datetime, name: str) -> DataFetcherFactory:
@@ -275,7 +275,7 @@ if __name__ == "__main__":
 
     # Day Ahead
     print("Day Ahead is being fetched...")
-    df_da = fetch_data(DATE, "Day-Ahead")
+    df_da = fetch_data(DATE, ServicesEnergy.DAY_AHEAD)
     # Save date which was fetched from Day Ahead
     insert_date(DB, df_da)
     # Save data which was fetched from Day Ahead
@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
     # Intra Day
     print("Intra Day is being fetched...")
-    df_intra = fetch_data(DATE, "Intra-Day")
+    df_intra = fetch_data(DATE, ServicesEnergy.INTRA_DAY)
     # Save date which was fetched from Intra Day
     insert_date(DB, df_intra)
     # Save data which was fetched from Intra Day
@@ -291,7 +291,7 @@ if __name__ == "__main__":
 
     # PSE 5-years Plan
     print("PSE 5-years Plan is being fetched...")
-    df_pse_5 = fetch_data(DATE, "PSE 5-years Plan")
+    df_pse_5 = fetch_data(DATE, ServicesEnergy.PSE_5_YEARS_PLAN)
     # Save date which was fetched from PSE 5-years Plan
     insert_date(DB, df_pse_5)
     # Save data which was fetched from PSE 5-years Plan
@@ -299,7 +299,7 @@ if __name__ == "__main__":
 
     # PSE PSE Balancing Market
     print("PSE Balancing Market is being fetched...")
-    df_bal = fetch_data(DATE, "PSE Balancing Market")
+    df_bal = fetch_data(DATE, ServicesEnergy.PSE_BALANCING_MARKET)
     # Save date which was fetched from PSE Balancing Market
     insert_date(DB, df_bal)
     # Save data which was fetched from PSE Balancing Market
@@ -307,7 +307,7 @@ if __name__ == "__main__":
 
     # PSE Current Daily
     print("PSE Current Daily Coordination Plan is being fetched...")
-    df_curr = fetch_data(DATE, "PSE Current Daily Coordination Plan")
+    df_curr = fetch_data(DATE, ServicesEnergy.PSE_CURRENT_DAILY_COORDINATION_PLAN)
     # Save date which was fetched from PSE Balancing Market
     insert_date(DB, df_curr)
     # Save data which was fetched from PSE Balancing Market

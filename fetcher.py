@@ -12,6 +12,14 @@ from bs4 import BeautifulSoup
 import numpy as np
 
 
+class ServicesEnergy:
+    DAY_AHEAD = 0
+    INTRA_DAY = 1
+    PSE_5_YEARS_PLAN = 2
+    PSE_BALANCING_MARKET = 3
+    PSE_CURRENT_DAILY_COORDINATION_PLAN = 4
+
+
 class DataFetcher(ABC):
     """
         This is a base class for data fetching.
@@ -60,10 +68,16 @@ class PSE5YearsPlanDataFetcher(DataFetcher):
         try:
             data = pd.read_csv(url, encoding="ISO-8859-11", sep=";")
             # print(data['Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB'].head(24))
-            data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
-                data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"].str.replace('\xa0', '')
-            data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
-                pd.to_numeric( data["Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"], errors='coerce')
+            data[
+                "Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
+                data[
+                    "Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"].str.replace(
+                    '\xa0', '')
+            data[
+                "Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"] = \
+                pd.to_numeric(data[
+                                  "Moc dyspozycyjna JW i magazyn๓w energii wiadczนcych usณugi bilansujนce w ramach RB dost๊pna dla OSP"],
+                              errors='coerce')
             data['Doba'] = pd.to_datetime(data['Doba'])
             data.set_index('Doba', inplace=True)
             return data.head(24)
@@ -313,6 +327,7 @@ class IntraDayMarketFetcher(DataFetcher):
         data['hour'] = list(range(1, 25))
         return data[['cenaIntraAvg', 'cenaIntraMin', 'cenaIntraMax', 'hour']]
 
+
 class DataFetcherFactory:
     """
     Factory for creating data fetchers for different sources and dates.
@@ -332,15 +347,15 @@ class DataFetcherFactory:
         Raises:
             ValueError: If an invalid source is specified.
         """
-        if source == "PSE 5-years Plan":
+        if source == ServicesEnergy.PSE_5_YEARS_PLAN:
             return PSE5YearsPlanDataFetcher(factory_date)
-        if source == "PSE Balancing Market":
+        if source == ServicesEnergy.PSE_BALANCING_MARKET:
             return PSEBalancingMarketFetcher(factory_date)
-        if source == "PSE Current Daily Coordination Plan":
+        if source == ServicesEnergy.PSE_CURRENT_DAILY_COORDINATION_PLAN:
             return PSECurrentDailyCoordinationPlanFetcher(factory_date)
-        if source == "Day-Ahead":
+        if source == ServicesEnergy.DAY_AHEAD:
             return DayAheadDataFetcher(factory_date)
-        if source == "Intra-Day":
+        if source == ServicesEnergy.INTRA_DAY:
             return IntraDayMarketFetcher(factory_date)
         else:
             raise ValueError("Invalid source specified")
@@ -352,7 +367,7 @@ if __name__ == "__main__":
     data_fetcher_factory = DataFetcherFactory()
     try:
         # Create a PSE data fetcher
-        pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+        pse_5_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.PSE_5_YEARS_PLAN, date)
         print(pse_5_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
@@ -360,7 +375,7 @@ if __name__ == "__main__":
 
     try:
         # Create a PSE data fetcher
-        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher("PSE Balancing Market", date)
+        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.PSE_BALANCING_MARKET, date)
         print(pse_bal_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
@@ -368,8 +383,8 @@ if __name__ == "__main__":
 
     try:
         # Create a PSE data fetcher
-        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(
-            "PSE Current Daily Coordination Plan", date)
+        pse_bal_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.PSE_CURRENT_DAILY_COORDINATION_PLAN,
+                                                                   date)
         print(pse_bal_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
@@ -377,14 +392,14 @@ if __name__ == "__main__":
 
     try:
         # Create a TGE data fetcher
-        tge_fetcher = data_fetcher_factory.create_data_fetcher("Day-Ahead", date)
+        tge_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.DAY_AHEAD, date)
         print(tge_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
         print(f"Error: {ve}")
     try:
         # Create a TGE data fetcher
-        tge_fetcher = data_fetcher_factory.create_data_fetcher("Intra-Day", date)
+        tge_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.INTRA_DAY, date)
         print(tge_fetcher.fetch_data())
     except ValueError as ve:
         # Handle other ValueErrors
