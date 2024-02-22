@@ -15,6 +15,7 @@ This Python project provides a set of data fetchers for retrieving electricity-r
   - [DayAheadDataFetcher](#dayaheaddatafetcher)
   - [IntraDayMarketFetcher](#intradaymarketfetcher)
 - [DataFetcherFactory](#datafetcherfactory)
+- [Class ServicesEnergy](#class-servicesenergy)
 - [Examples](#examples)
 - [Database](#database)
   - [Setup Database](#setup-database)
@@ -61,7 +62,7 @@ pipenv shell
 ## PSE5YearsPlanDataFetcher
 This data fetcher retrieves data from Polskie Sieci Energetyczne (PSE) for the Coordinated 5-years Plan.
 * **fetch_data():** Fetches data and returns a pandas DataFrame.
-##P SEBalancingMarketFetcher
+## PSEBalancingMarketFetcher
 This data fetcher retrieves data from PSE for Balancing Market Operation - Energy & Prices on Balancing Market.
 * **fetch_data():** Fetches data and returns a pandas DataFrame.
 ## PSECurrentDailyCoordinationPlanFetcher
@@ -76,6 +77,16 @@ This data fetcher retrieves data from the Polish Power Exchange (TGE) for the In
 ## DataFetcherFactory
 The DataFetcherFactory class is a factory for creating data fetchers for different sources and dates.
 * **create_data_fetcher(source: str, factory_date: datetime):** Creates a data fetcher for the specified source and date.
+## Class ServicesEnergy
+```python
+class ServicesEnergy:
+    DAY_AHEAD = 0
+    INTRA_DAY = 1
+    PSE_5_YEARS_PLAN = 2
+    PSE_BALANCING_MARKET = 3
+    PSE_CURRENT_DAILY_COORDINATION_PLAN = 4
+```
+ServicesEnergy is a class that defines constants representing parameters for fetching data from various energy-related services. Each constant corresponds to a specific service, providing a convenient and readable way to reference these services when retrieving data. The class serves as a central point for managing and organizing the different types of energy services available in the application.
 ## Examples
 
 ```python
@@ -88,7 +99,7 @@ data_fetcher_factory = DataFetcherFactory()
 
 try:
     # Create a PSE data fetcher
-    pse_5_fetcher = data_fetcher_factory.create_data_fetcher("PSE 5-years Plan", date)
+    pse_5_fetcher = data_fetcher_factory.create_data_fetcher(ServicesEnergy.PSE_5_YEARS_PLAN, date)
     print(pse_5_fetcher.fetch_data())
 except ValueError as ve:
     # Handle other ValueErrors
